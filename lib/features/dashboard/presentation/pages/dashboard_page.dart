@@ -237,7 +237,7 @@ class DashboardPage extends ConsumerWidget {
                                   case 'Dosen':
                                     targetPage = const DosenPage();
                                     break;
-                                  case 'Mahasiswa Lulus':
+                                  case 'Profile':
                                     targetPage = const ProfilePage();
                                     break;
                                 }
@@ -265,7 +265,6 @@ class DashboardPage extends ConsumerWidget {
     );
   }
 
-  // transisi waktu pindah page
   Route _createRoute(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
@@ -281,7 +280,6 @@ class DashboardPage extends ConsumerWidget {
     );
   }
 
-  // convert tanggal update
   String _formatDate(DateTime date) {
     final months = [
       'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',

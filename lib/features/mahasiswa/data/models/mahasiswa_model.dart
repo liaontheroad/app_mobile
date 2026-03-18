@@ -12,4 +12,13 @@ class MahasiswaModel {
     required this.email,
     this.isAktif = false,
   });
+  factory MahasiswaModel.fromJson(Map<String, dynamic> json) {
+    return MahasiswaModel(
+      nama: json['name'] ?? 'Tanpa Nama',
+      email: json['email'] ?? 'Tidak ada email',
+      nim: json['id'].toString(),
+      jurusan: 'Komentator',
+      isAktif: json['id'] % 2 == 0,
+    );
+  }
 }

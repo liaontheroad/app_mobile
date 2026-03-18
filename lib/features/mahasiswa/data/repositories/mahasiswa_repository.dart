@@ -1,28 +1,54 @@
+import 'package:dio/dio.dart';
 import '../models/mahasiswa_model.dart';
 
 class MahasiswaRepository {
-  Future<List<MahasiswaModel>> getAllMahasiswa() async {
-    await Future.delayed(const Duration(milliseconds: 800)); // Simulasi loading
+  final Dio _dio = Dio();
 
-    return [
-      MahasiswaModel(nama: 'Annisa Putri', nim: '100526', jurusan: 'Teknik Informatika', email: 'annisaputri467904@gmail.com', isAktif: true),
-      MahasiswaModel(nama: 'Aglaea Mnestia', nim: '100618', jurusan: 'Fashion Design', email: 'kalos618@gmail.com'),
-      MahasiswaModel(nama: 'Anaxagoras Aletheia', nim: '100720', jurusan: 'Kimia', email: 'skemma720@gmail.com'),
-      MahasiswaModel(nama: 'Castorice Aidonia', nim: '100216', jurusan: 'Fotografi', email: 'epieikeia216@gmail.com'),
-      MahasiswaModel(nama: 'Cerydra Hyperborea', nim: '100514', jurusan: 'Hukum', email: 'hubris504@gmail.com'),
-      MahasiswaModel(nama: 'Cipher Dolos', nim: '100945', jurusan: 'Teknologi Informasi', email: 'orexis945@gmail.com'),
-      MahasiswaModel(nama: 'Cyrene Demiurge', nim: '100093', jurusan: 'Psikologi', email: 'philia093@gmail.com'),
-      MahasiswaModel(nama: 'Hyacine Twilight', nim: '100252', jurusan: 'Kedokteran', email: 'eleos252@gmail.com'),
-      MahasiswaModel(nama: 'Hysilens Styxia', nim: '100432', jurusan: 'Oseanografi', email: 'aporia432@gmail.com'),
-      MahasiswaModel(nama: 'Mydeimos Kremnos', nim: '100600', jurusan: 'Sastra', email: 'polemos600@gmail.com'),
-      MahasiswaModel(nama: 'Phainon Khaslana', nim: '100496', jurusan: 'Sastra', email: 'neikos496@gmail.com'),
-      MahasiswaModel(nama: 'Tribbie Trianne Trinnon', nim: '100405', jurusan: 'Belum Ditentukan', email: 'haplotes405@gmail.com'),
-      MahasiswaModel(nama: 'Amalia Citra', nim: '100365', jurusan: 'Arsitektur', email: 'skopeo365@gmail.com', isAktif: true),
-    ];
+  final _headers = {
+    'Accept': 'application/json',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  };
+
+  Future<List<MahasiswaModel>> getAllMahasiswa() async {
+    try {
+      final response = await _dio.get(
+        'https://jsonplaceholder.typicode.com/comments',
+        options: Options(headers: _headers),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        return data.take(20).map((json) => MahasiswaModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Gagal memuat data mahasiswa');
+      }
+    } catch (e) {
+      throw Exception('Terjadi kesalahan: $e');
+    }
   }
 
   Future<List<MahasiswaModel>> getMahasiswaAktif() async {
-    final allData = await getAllMahasiswa();
-    return allData.where((mhs) => mhs.isAktif).toList();
+    try {
+      final response = await _dio.get(
+        'https://jsonplaceholder.typicode.com/posts',
+        options: Options(headers: _headers),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+
+        return data.take(10).map((json) => MahasiswaModel(
+          nama: json['title'] ?? 'Tanpa Judul',
+          email: json['body'] ?? 'Tidak ada deskripsi',
+          nim: json['id'].toString(),
+          jurusan: 'Mahasiswa Aktif (API)',
+          isAktif: true,
+        )).toList();
+      } else {
+        throw Exception('Gagal memuat data mahasiswa aktif');
+      }
+    } catch (e) {
+      throw Exception('Terjadi kesalahan: $e');
+    }
   }
 }

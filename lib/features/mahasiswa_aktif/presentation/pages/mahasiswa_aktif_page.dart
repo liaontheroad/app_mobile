@@ -10,7 +10,7 @@ class MahasiswaAktifPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mahasiswaAktifState = ref.watch(mahasiswaAktifNotifierProvider);
+    final mahasiswaAktifState = ref.watch(mahasiswaAktifProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -20,7 +20,7 @@ class MahasiswaAktifPage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
-            onPressed: () => ref.invalidate(mahasiswaAktifNotifierProvider),
+            onPressed: () => ref.invalidate(mahasiswaAktifProvider),
           ),
         ],
       ),
@@ -28,7 +28,7 @@ class MahasiswaAktifPage extends ConsumerWidget {
         loading: () => const LoadingWidget(),
         error: (error, stack) => CustomErrorWidget(
           message: 'Gagal memuat data: $error',
-          onRetry: () => ref.invalidate(mahasiswaAktifNotifierProvider),
+          onRetry: () => ref.invalidate(mahasiswaAktifProvider),
         ),
         data: (listMahasiswaAktif) {
           if (listMahasiswaAktif.isEmpty) {
@@ -36,7 +36,7 @@ class MahasiswaAktifPage extends ConsumerWidget {
           }
 
           return RefreshIndicator(
-            onRefresh: () async => ref.invalidate(mahasiswaAktifNotifierProvider),
+            onRefresh: () async => ref.invalidate(mahasiswaAktifProvider),
             child: GridView.builder(
               padding: const EdgeInsets.all(AppConstants.paddingLarge),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

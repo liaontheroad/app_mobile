@@ -1,29 +1,24 @@
 import 'package:dio/dio.dart';
+import '../../../../core/network/dio_client.dart';
 import '../models/dosen_model.dart';
 
 class DosenRepository {
-  final Dio _dio = Dio();
+  final DioClient _dioClient;
 
-  final _headers = {
-    'Accept': 'application/json',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  };
+  DosenRepository({DioClient? dioClient})
+      : _dioClient = dioClient ?? DioClient();
 
+  /// Get data daftar dosen
   Future<List<DosenModel>> getDosenList() async {
     try {
-      final response = await _dio.get(
-        'https://jsonplaceholder.typicode.com/users',
-        options: Options(headers: _headers),
-      );
+      // Perhatikan: Kita pakai _dioClient.dio sekarang!
+      final Response response = await _dioClient.dio.get('/users');
+      final List<dynamic> data = response.data;
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = response.data;
-        return data.map((json) => DosenModel.fromJson(json)).toList();
-      } else {
-        throw Exception('Gagal memuat data dosen');
-      }
-    } catch (e) {
-      throw Exception('Terjadi kesalahan: $e');
+      return data.map((json) => DosenModel.fromJson(json)).toList();
+    } on DioException catch (e) {
+      throw Exception(
+          'Gagal memuat data dosen: ${e.response?.statusCode} - ${e.message}');
     }
   }
 }

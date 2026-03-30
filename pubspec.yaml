@@ -32,9 +32,10 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^2.6.1
   http: ^1.2.2
-  dio: ^5.4.0
+  dio: ^5.8.0+1
   provider: ^6.1.5+1
   cupertino_icons: ^1.0.8
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
